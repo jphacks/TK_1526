@@ -1,37 +1,38 @@
-# サンプル（プロダクト名）
-## 製品概要
-### 背景(製品開発のきっかけ、課題等）
-### 製品説明（具体的な製品の説明）
-### 特長
-####1. 特長1
-####2. 特長2
-####3. 特長3
+# (Product Name)
+## Product Abstract
 
-### 解決出来ること
-### 今後の展望
-### 注力したこと（こだわり等）
-* 
-* 
 
-## 開発技術
-### 活用した技術
-#### API・データ
+### Context
+### Explanation
+### Strong Points
+####1. merit1
+####2. merit2
+####3. merit3
+
+### What it solves
+### Prospect
+### Emphasis
 * 
 * 
 
-#### フレームワーク・ライブラリ・モジュール
-* 
+## Technologies
+### Used tecknology
+#### API・data
+* Speech to Text / Text to Speech function of Watson API provided by IBM Bluemix.
+* spoonacular.com Food / Recipe API
+
+#### Framewark・Library・Module
+* Xcode7 / Swift2.0
 * 
 
-#### デバイス
-* 
+#### Device
+* iPhone / iOS
 * 
 
-### 独自技術
-#### ハッカソンで開発した独自機能・技術
-* 独自で開発したものの内容をこちらに記載してください
-* 特に力を入れた部分をファイルリンク、またはcommit_idを記載してください。
+### Original tecknology
+#### Original technologies developed in this Hackason
+* 
 
-#### 製品に取り入れた研究内容（データ・ソフトウェアなど）（※アカデミック部門の場合のみ提出必須）
+#### Contents of studies（including data, softwares）（※required in entry to Academic area）
 * 
 * 
