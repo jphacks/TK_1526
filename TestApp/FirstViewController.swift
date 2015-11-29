@@ -85,14 +85,8 @@ class FirstViewController: UIViewController {
         createNavigationBar()
         createTimerView()
         self.view.addSubview(nextButton);
-
-//        var tmr: Void = NSTimer.scheduledTimerWithTimeInterval(
-//            1.0,
-//            target: self,
-//            selector: Selector("tickTimer:"),
-//            userInfo: nil,
-//            repeats: true)
-//            .fire()
+        
+        //startTimer(5);
         
     }
     class myTimer{
@@ -262,12 +256,23 @@ class FirstViewController: UIViewController {
         lbTimer = UILabel(frame: CGRect(x:0,y:0,width:320,height:100))
         lbTimer.backgroundColor = UIColorFromRGB(0xBFBB72)
         lbTimer.layer.position = CGPoint(x:self.view.bounds.width/2 ,y:928/2);
-        lbTimer.text = "11:00"
+        lbTimer.text = "00:00"
         lbTimer.font = UIFont(name: "HelveticaNeue-Light", size: 64)
         lbTimer.textAlignment = NSTextAlignment.Center
         lbTimer.textColor=UIColor.whiteColor()
         self.view.addSubview(lbTimer)
         
+    }
+    
+    func startTimer(minute:Int){
+        lbTimer.text = String(minute)+":00"
+        var tmr: Void = NSTimer.scheduledTimerWithTimeInterval(
+            1.0,
+            target: self,
+            selector: Selector("tickTimer:"),
+            userInfo: nil,
+            repeats: true)
+            .fire()
     }
     
     func getAsync(){
