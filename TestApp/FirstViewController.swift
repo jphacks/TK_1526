@@ -30,6 +30,12 @@ class FirstViewController: UIViewController {
     
     
     
+    let numDictionary = [
+        "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+        "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16,
+        "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20
+    ]
+
     func UIColorFromRGB(rgbValue: UInt) -> UIColor {
         return UIColor(
             red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
@@ -166,7 +172,10 @@ class FirstViewController: UIViewController {
                             self.readNextInstruction()
                         
 
-                        
+                        self.readNextInstruction()
+                    } else if (self.text == "timer for") {
+                        let timerLengthNum = self.setTimerLengthNum(&self.text)
+                        print(timerLengthNum)
                     }
                     stt.endRecognize()
                 }
@@ -181,6 +190,29 @@ class FirstViewController: UIViewController {
         
     }
     
+    func setTimerLengthNum(inout str:String) -> (Int) {
+        var timerLengthInt: Int? = 0
+        let splitedInputTextArray: [String] = str.componentsSeparatedByString(" ")
+        for tuple in splitedInputTextArray.enumerate() {
+            if ((tuple.element == "minute") || (tuple.element == "minutes")) {
+                let indexNum = tuple.index - 1
+                let numStr = splitedInputTextArray[indexNum]
+                if Int(numStr) == nil {
+                    if (numDictionary[numStr] == nil) {
+                        timerLengthInt = 0
+                    } else {
+                        timerLengthInt = numDictionary[numStr]
+                    }
+                } else {
+                    timerLengthInt = Int(numStr)
+                }
+
+            }
+        }
+
+        return timerLengthInt!
+    }
+
     func readNextInstruction(){
         //var instructions: [String] = parseInstructions(self.instruction);
         let tts = TextToSpeech(config: self.conf);
