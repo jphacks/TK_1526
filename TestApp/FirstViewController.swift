@@ -125,12 +125,15 @@ class FirstViewController: UIViewController {
             if ((tuple.element == "minute") || (tuple.element == "minutes")) {
                 let indexNum = tuple.index - 1
                 let numStr = splitedInputTextArray[indexNum]
-                timerLengthInt = numDictionary[numStr]
-                if (numDictionary[numStr] == nil) {
-                  timerLengthInt = 0
+                if Int(numStr) == nil {
+                    timerLengthInt = numDictionary[numStr]
+                    if (numDictionary[numStr] == nil) {
+                        timerLengthInt = 0
+                    }
+                } else {
+                    timerLengthInt = Int(numStr)
                 }
-            } else {
-                timerLengthInt = 0
+
             }
         }
 
