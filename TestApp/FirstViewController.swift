@@ -18,6 +18,17 @@ class FirstViewController: UIViewController {
     let conf:TTSConfiguration = TTSConfiguration();
     let confstt:STTConfiguration = STTConfiguration();
     var lbTimer: UILabel!
+    var instruction:String=""
+    var instructions:[String]=[]
+    var ingredients:[String]=[]
+    var ingredient:String=""
+    var instructionDoable:[Bool]=[]
+    
+    var ingredient_bank:NSMutableDictionary=NSMutableDictionary()
+    
+    let noodleTime: NSTimeInterval = 60 * 3
+    
+    
     
     func UIColorFromRGB(rgbValue: UInt) -> UIColor {
         return UIColor(
@@ -74,9 +85,67 @@ class FirstViewController: UIViewController {
         createNavigationBar()
         createTimerView()
         self.view.addSubview(nextButton);
+
+//        var tmr: Void = NSTimer.scheduledTimerWithTimeInterval(
+//            1.0,
+//            target: self,
+//            selector: Selector("tickTimer:"),
+//            userInfo: nil,
+//            repeats: true)
+//            .fire()
         
     }
+    class myTimer{
+        var duration=3;
+        var name:String=""
+        var vc:FirstViewController
+        var tmr:NSTimer;
+        init(_name:String,_duration:Int,_FirstViewController:FirstViewController){
+            vc=_FirstViewController
+            tmr = NSTimer.scheduledTimerWithTimeInterval(
+                1.0,
+                target: self.vc,
+                selector: Selector("tickTimer:"),
+                userInfo: nil,
+                repeats: true)
+            tmr.invalidate();
+            name=_name
+            duration=_duration
+            
+        }
+
+        func fire(){
+            tmr.fire();
+        }
+        // タイマー処理
+    }
     
+    func tickTimer(timer: NSTimer) {
+        
+        //NSLog(@"タイマー表示");
+        
+        // 時間書式の設定
+        let df:NSDateFormatter = NSDateFormatter()
+        df.dateFormat = "mm:ss"
+        
+        // 基準日時の設定 ３分を日付型に変換
+        let dt:NSDate = df.dateFromString(lbTimer.text!)!
+        
+        // カウントダウン
+        let dt02 = NSDate(timeInterval: -1.0, sinceDate: dt)
+        
+        lbTimer.text = df.stringFromDate(dt02)
+        
+        // 終了判定 3分が00:00になったら isEqualToString:文字の比較
+        if lbTimer.text == "00:00" {
+            
+            // バックアップ背景色の変更
+            //self.view.backgroundColor = UIColor.redColor()
+            
+            // タイマーの停止
+            timer.invalidate()
+        }
+    }
     /*
     ボタンイベント.
     */
@@ -93,8 +162,11 @@ class FirstViewController: UIViewController {
                     
                     NSLog("this is the final transcript");
                     if(self.text=="next "){
+
+                            self.readNextInstruction()
                         
-                        self.readNextInstruction()
+
+                        
                     }
                     stt.endRecognize()
                 }
@@ -110,8 +182,9 @@ class FirstViewController: UIViewController {
     }
     
     func readNextInstruction(){
-        var instructions: [String] = parseInstructions("Bring a large pot of lightly salted water to a boil. </li>\n<li>Add pasta and cook for 8 to 10 minutes or until al dente; drain and set aside.</li>\n<li>Preheat oven to 375 degrees F (190 degrees C).</li>\n<li>Meanwhile, melt butter in a large saucepan over medium heat. </li>\n<li>Add mushrooms, onion and bell pepper and saute until tender. Stir in cream of mushroom soup and chicken broth; cook, stirring, until heated through. Stir in pasta, Cheddar cheese, peas, sherry, Worcestershire sauce, salt, pepper and chicken. Mix well and transfer mixture to a lightly greased 11x14 inch baking dish. Sprinkle with Parmesan cheese and paprika.</li>\n<li>Bake in the preheated oven for 25 to 35 minutes, or until heated through.");
+        //var instructions: [String] = parseInstructions(self.instruction);
         let tts = TextToSpeech(config: self.conf);
+        
         tts!.synthesize({
             (data, err) in
             
@@ -120,19 +193,31 @@ class FirstViewController: UIViewController {
                 
                 }, withData: data)
             
-            }, theText: instructions[self.inst_cnt]);
+            }, theText: self.instructions[self.inst_cnt]);
         print(self.inst_cnt);
-        if(self.inst_cnt<instructions.count){self.inst_cnt++}
+        if(self.inst_cnt<self.instructions.count){
+            self.inst_cnt++
+        }
         else{self.inst_cnt=0}
+        
+        var tmr = myTimer(_name: "timer",_duration: 3,_FirstViewController: self)
+        for ingredient in self.ingredients{
+            if (self.instructions[self.inst_cnt].rangeOfString(ingredient as! String) != nil) {
+                self.ingredient_bank[ingredient as! String] = tmr
+            }
+        }
+        
+        
     }
     
     
-    func parseInstructions(_ins:String) -> [String]{
-        let ins = "aaa</li>\n<li>" + _ins
+    func parseInstructions(ins:String) -> [String]{
         let trimWhite = ins.stringByReplacingOccurrencesOfString("\n", withString: "")
         let start = trimWhite.rangeOfString("<li>")!.endIndex
         let end = trimWhite.rangeOfString("</li>", options:NSStringCompareOptions.BackwardsSearch)!.startIndex
         let trim = trimWhite.substringWithRange(Range<String.Index>(start:start, end:end))
+        
+        
         return trim.componentsSeparatedByString("</li><li>")
     }
     
@@ -177,30 +262,40 @@ class FirstViewController: UIViewController {
         lbTimer = UILabel(frame: CGRect(x:0,y:0,width:320,height:100))
         lbTimer.backgroundColor = UIColorFromRGB(0xBFBB72)
         lbTimer.layer.position = CGPoint(x:self.view.bounds.width/2 ,y:928/2);
+        lbTimer.text = "11:00"
+        lbTimer.font = UIFont(name: "HelveticaNeue-Light", size: 64)
+        lbTimer.textAlignment = NSTextAlignment.Center
+        lbTimer.textColor=UIColor.whiteColor()
         self.view.addSubview(lbTimer)
         
     }
     
-    func getAsync() {
+    func getAsync(){
         
         // create the url-request
         let urlString = "https://api.myjson.com/bins/2gmr3"
-        var request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
+        let request = NSMutableURLRequest(URL: NSURL(string: urlString)!)
         
         // set the method(HTTP-GET)
         request.HTTPMethod = "GET"
         
         // use NSURLSessionDataTask
-        var task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { data, response, error in
+        let task = NSURLSession.sharedSession().dataTaskWithRequest(request, completionHandler: { data, response, error in
             if (error == nil) {
-                var string = NSString(data: data!, encoding: NSUTF8StringEncoding)!
+                let string = NSString(data: data!, encoding: NSUTF8StringEncoding)!
                 do{
-                    var data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
+                    let data = string.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)
                     if let d = data {
                         //print(NSString(data: d, encoding: NSUTF8StringEncoding))
                     }
-                    let json:AnyObject! = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
-                    print(json)
+                    let json:NSDictionary! = try NSJSONSerialization.JSONObjectWithData(data!, options: NSJSONReadingOptions.MutableContainers) as? NSDictionary
+                    self.instructions = self.parseInstructions(json.objectForKey("instructions")as! String);
+                    self.instructionDoable = [Bool](count: self.instructions.count, repeatedValue: true)
+                    for item in json.objectForKey("extendedIngredients") as! NSArray{
+                        self.ingredients.append(item["name"] as! String)
+                    }
+                    
+                    print(self.ingredients)
                 }
                 catch let error as NSError {
                     print(error.localizedDescription)
@@ -212,35 +307,12 @@ class FirstViewController: UIViewController {
             }
         })
         task.resume()
-        
     }
     
-    // タイマー処理
-    func tickTimer(timer: NSTimer) {
-        
-        //NSLog(@"タイマー表示");
-        
-        // 時間書式の設定
-        let df:NSDateFormatter = NSDateFormatter()
-        df.dateFormat = "mm:ss"
-        
-        // 基準日時の設定 ３分を日付型に変換
-        var dt:NSDate = df.dateFromString(lbTimer.text!)!
-        
-        // カウントダウン
-        var dt02 = NSDate(timeInterval: -1.0, sinceDate: dt)
-        
-        self.lbTimer.text = df.stringFromDate(dt02)
-        
-        // 終了判定 3分が00:00になったら isEqualToString:文字の比較
-        if self.lbTimer.text == "00:00" {
-            
-            // バックアップ背景色の変更
-            //self.view.backgroundColor = UIColor.redColor()
-            
-            // タイマーの停止
-            timer.invalidate()
-        }
-    }
+
+    
+
+    
+
     
 }
