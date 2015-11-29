@@ -155,11 +155,24 @@ class FirstViewController: UIViewController {
                 if stt.isFinalTranscript(res) {
                     
                     NSLog("this is the final transcript");
-                    if(self.text=="next "){
-
-                            self.readNextInstruction()
+                    
+                    let num:Int = self.extractTimeFromSentence(&self.text)
+                    if(num != 0){
+                        self.startTimer(num)
+                        let tts = TextToSpeech(config: self.conf);
                         
-
+                        tts!.synthesize({
+                            (data, err) in
+                            
+                            tts!.playAudio({
+                                (err) in
+                                
+                                }, withData: data)
+                            
+                            }, theText: "OK. Timer for "+String(num)+" minutes starts ");
+                    }
+                    else if(self.text=="next "){
+                            self.readNextInstruction()
                         
                     }
                     stt.endRecognize()
@@ -176,7 +189,28 @@ class FirstViewController: UIViewController {
     }
     
     func readNextInstruction(){
-        //var instructions: [String] = parseInstructions(self.instruction);
+        
+        print(self.inst_cnt);
+        if(self.inst_cnt<self.instructions.count){
+            read(self.instructions[self.inst_cnt]);
+            self.inst_cnt++
+        }
+        else{
+            read(self.instructions[self.inst_cnt] + "  OK! Enjoy your meal! ");
+            self.inst_cnt=0
+        }
+        
+//        var tmr = myTimer(_name: "timer",_duration: 3,_FirstViewController: self)
+//        for ingredient in self.ingredients{
+//            if (self.instructions[self.inst_cnt].rangeOfString(ingredient as! String) != nil) {
+//                self.ingredient_bank[ingredient as! String] = tmr
+//            }
+//        }
+        
+        
+    }
+    
+    func read(txt:String){
         let tts = TextToSpeech(config: self.conf);
         
         tts!.synthesize({
@@ -187,23 +221,8 @@ class FirstViewController: UIViewController {
                 
                 }, withData: data)
             
-            }, theText: self.instructions[self.inst_cnt]);
-        print(self.inst_cnt);
-        if(self.inst_cnt<self.instructions.count){
-            self.inst_cnt++
-        }
-        else{self.inst_cnt=0}
-        
-        var tmr = myTimer(_name: "timer",_duration: 3,_FirstViewController: self)
-        for ingredient in self.ingredients{
-            if (self.instructions[self.inst_cnt].rangeOfString(ingredient as! String) != nil) {
-                self.ingredient_bank[ingredient as! String] = tmr
-            }
-        }
-        
-        
+            }, theText: txt);
     }
-    
     
     func parseInstructions(ins:String) -> [String]{
         let trimWhite = ins.stringByReplacingOccurrencesOfString("\n", withString: "")
@@ -314,7 +333,35 @@ class FirstViewController: UIViewController {
         task.resume()
     }
     
-
+    
+    var numDictionary = [
+        "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+        "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16,
+        "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20
+    ]
+    
+    func extractTimeFromSentence(inout str:String) -> (Int) {
+        var numInt: Int?
+        let splitedSentenceArray: [String] = str.componentsSeparatedByString(" ")
+        for tuple in splitedSentenceArray.enumerate() {
+            if ((tuple.element == "minute") || (tuple.element == "minutes")) {
+                let indexNum = tuple.index-1
+                let numStr = splitedSentenceArray[indexNum]
+                if Int(numStr) == nil {
+                    if (numDictionary[numStr] == nil) {
+                        numInt = 0
+                    } else {
+                        numInt = numDictionary[numStr]
+                    }
+                } else {
+                    numInt = Int(numStr)
+                }
+            }
+            //else {return 0;}
+        }
+        if(numInt == nil){return 0;}
+        return numInt!
+    }
     
 
     
