@@ -24,8 +24,8 @@
 		C32805C21C0976D900B294B6 /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = C32805C11C0976D900B294B6 /* libicucore.tbd */; };
 		C32805C41C0976E000B294B6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C32805C31C0976E000B294B6 /* QuartzCore.framework */; };
 		C32805C61C0976E600B294B6 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C32805C51C0976E600B294B6 /* Security.framework */; };
-		C32805CB1C09A18B00B294B6 /* tuscani.png in Resources */ = {isa = PBXBuildFile; fileRef = C32805CA1C09A18B00B294B6 /* tuscani.png */; };
-		C32805CF1C0A826700B294B6 /* speaker.png in Resources */ = {isa = PBXBuildFile; fileRef = C32805CE1C0A826700B294B6 /* speaker.png */; };
+		C39687721C0A913800C36F63 /* speaker.png in Resources */ = {isa = PBXBuildFile; fileRef = C39687711C0A913800C36F63 /* speaker.png */; };
+		C39687741C0A914200C36F63 /* tuscani.png in Resources */ = {isa = PBXBuildFile; fileRef = C39687731C0A914200C36F63 /* tuscani.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,8 +70,8 @@
 		C32805C31C0976E000B294B6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C32805C51C0976E600B294B6 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		C32805C71C09777A00B294B6 /* TestApp-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TestApp-Bridging-Header.h"; sourceTree = "<group>"; };
-		C32805CA1C09A18B00B294B6 /* tuscani.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tuscani.png; path = ../../../../tuscani.png; sourceTree = "<group>"; };
-		C32805CE1C0A826700B294B6 /* speaker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = speaker.png; path = ../../../../speaker.png; sourceTree = "<group>"; };
+		C39687711C0A913800C36F63 /* speaker.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = speaker.png; sourceTree = "<group>"; };
+		C39687731C0A914200C36F63 /* tuscani.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tuscani.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,9 +139,9 @@
 				C32805881C096B3A00B294B6 /* Main.storyboard */,
 				C328058B1C096B3A00B294B6 /* Assets.xcassets */,
 				C328058D1C096B3A00B294B6 /* LaunchScreen.storyboard */,
-				C32805CA1C09A18B00B294B6 /* tuscani.png */,
 				C32805901C096B3A00B294B6 /* Info.plist */,
-				C32805CE1C0A826700B294B6 /* speaker.png */,
+				C39687731C0A914200C36F63 /* tuscani.png */,
+				C39687711C0A913800C36F63 /* speaker.png */,
 			);
 			path = TestApp;
 			sourceTree = "<group>";
@@ -285,10 +285,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				C328058F1C096B3A00B294B6 /* LaunchScreen.storyboard in Resources */,
+				C39687721C0A913800C36F63 /* speaker.png in Resources */,
 				C328058C1C096B3A00B294B6 /* Assets.xcassets in Resources */,
-				C32805CB1C09A18B00B294B6 /* tuscani.png in Resources */,
 				C328058A1C096B3A00B294B6 /* Main.storyboard in Resources */,
-				C32805CF1C0A826700B294B6 /* speaker.png in Resources */,
+				C39687741C0A914200C36F63 /* tuscani.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -553,6 +553,7 @@
 				C32805AB1C096B3A00B294B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C32805AC1C096B3A00B294B6 /* Build configuration list for PBXNativeTarget "TestAppTests" */ = {
 			isa = XCConfigurationList;
@@ -561,6 +562,7 @@
 				C32805AE1C096B3A00B294B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C32805AF1C096B3A00B294B6 /* Build configuration list for PBXNativeTarget "TestAppUITests" */ = {
 			isa = XCConfigurationList;
@@ -569,6 +571,7 @@
 				C32805B11C096B3A00B294B6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
