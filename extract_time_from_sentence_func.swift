@@ -11,10 +11,17 @@ func extractTimeFromSentence(inout str:String) -> (Int) {
     let splitedSentenceArray: [String] = str.componentsSeparatedByString(" ")
     for tuple in splitedSentenceArray.enumerate() {
         if ((tuple.element == "minute") || (tuple.element == "minutes")) {
-            print("\(tuple.index)")
             let indexNum = tuple.index-1
             let numStr = splitedSentenceArray[indexNum]
-            numInt = numDictionary[numStr]
+            if Int(numStr) == nil {
+                if (numDictionary[numStr] == nil) {
+                    numInt = 0
+                } else {
+                    numInt = numDictionary[numStr]
+                }
+            } else {
+                numInt = Int(numStr)
+            }
         }
     }
     return numInt!
