@@ -19,6 +19,12 @@ class FirstViewController: UIViewController {
     let confstt:STTConfiguration = STTConfiguration();
     var lbTimer: UILabel!
     
+    let numDictionary = [
+        "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9,
+        "ten": 10, "eleven": 11, "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15, "sixteen": 16,
+        "seventeen": 17, "eighteen": 18, "nineteen": 19, "twenty": 20
+    ]
+
     func UIColorFromRGB(rgbValue: UInt) -> UIColor {
         return UIColor(
             red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0,
@@ -95,6 +101,9 @@ class FirstViewController: UIViewController {
                     if(self.text=="next "){
                         
                         self.readNextInstruction()
+                    } else if (self.text == "timer for") {
+                        let timerLengthNum = self.setTimerLengthNum(&self.text)
+                        print(timerLengthNum)
                     }
                     stt.endRecognize()
                 }
@@ -109,6 +118,25 @@ class FirstViewController: UIViewController {
         
     }
     
+    func setTimerLengthNum(inout str:String) -> (Int) {
+        var timerLengthInt: Int? = 0
+        let splitedInputTextArray: [String] = str.componentsSeparatedByString(" ")
+        for tuple in splitedInputTextArray.enumerate() {
+            if ((tuple.element == "minute") || (tuple.element == "minutes")) {
+                let indexNum = tuple.index - 1
+                let numStr = splitedInputTextArray[indexNum]
+                timerLengthInt = numDictionary[numStr]
+                if (numDictionary[numStr] == nil) {
+                  timerLengthInt = 0
+                }
+            } else {
+                timerLengthInt = 0
+            }
+        }
+
+        return timerLengthInt!
+    }
+
     func readNextInstruction(){
         var instructions: [String] = parseInstructions("Bring a large pot of lightly salted water to a boil. </li>\n<li>Add pasta and cook for 8 to 10 minutes or until al dente; drain and set aside.</li>\n<li>Preheat oven to 375 degrees F (190 degrees C).</li>\n<li>Meanwhile, melt butter in a large saucepan over medium heat. </li>\n<li>Add mushrooms, onion and bell pepper and saute until tender. Stir in cream of mushroom soup and chicken broth; cook, stirring, until heated through. Stir in pasta, Cheddar cheese, peas, sherry, Worcestershire sauce, salt, pepper and chicken. Mix well and transfer mixture to a lightly greased 11x14 inch baking dish. Sprinkle with Parmesan cheese and paprika.</li>\n<li>Bake in the preheated oven for 25 to 35 minutes, or until heated through.");
         let tts = TextToSpeech(config: self.conf);
