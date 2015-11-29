@@ -43,7 +43,7 @@ IBM Watson speaks surprisingly fluently and suitable for interaction between peo
 #### Device
 * iPhone / iOS
 
-### Original tecknology
+### Original technology
 #### Original technologies developed in this Hackason
 * Not only convert speech to text, but also set a timer.
 
